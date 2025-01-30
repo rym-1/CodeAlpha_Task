@@ -1,0 +1,34 @@
+download snort
+
+cd C:\Snort\bin
+
+
+snort -V
+
+C:\Snort\logs
+C:\Snort\rules
+C:\Snort\etc
+
+
+ipvar HOME_NET 192.168.1.0/24  
+ipvar EXTERNAL_NET any       
+
+
+include $RULE_PATH/rules.local
+
+
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (msg:"Port scan detected"; flags:S; detection_filter: track by_src, count 5, seconds 10; sid:1000001; rev:1;)
+
+
+
+
+snort -T -c C:\Snort\etc\snort.conf
+
+
+snort -A console -q -c C:\Snort\etc\snort.conf -i <interface> -l C:\Snort\logs
+
+
+@echo off
+cd C:\Snort\bin
+snort -A console -q -c C:\Snort\etc\snort.conf -i <interface> -l C:\Snort\logs 
